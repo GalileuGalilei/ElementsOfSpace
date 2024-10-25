@@ -8,13 +8,16 @@ public class ElementUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI symbol;
     [SerializeField]
-    private UnityEngine.UI.Image background;    
+    private UnityEngine.UI.Image background;
+    public string Symbol => symbol.text;
 
     public void SetFadeLevel(float fadeLevel)
     {
         Color color = background.color;
         color.a = fadeLevel;
         background.color = color;
+
+        symbol.color = new Color(1, 1, 1, fadeLevel);
     }
 
     public void SetSymbol(string symbol)
@@ -27,13 +30,17 @@ public class ElementUI : MonoBehaviour
         this.background.color = color;
     }
 
-    public IEnumerator ElementFoundAnimation()
+    public IEnumerator ElementFoundAnimation(float foundAnimationTime)
     {
-        float fadeLevel = 1;
-        while (fadeLevel > 0)
+        const float initialSizeMultiplier = 5.0f;
+        const float finalSizeMultiplier = 1.0f;
+        float speed = initialSizeMultiplier / foundAnimationTime;
+
+        float sizeMultiplier = initialSizeMultiplier;
+        while (sizeMultiplier > finalSizeMultiplier)
         {
-            fadeLevel -= Time.deltaTime;
-            SetFadeLevel(fadeLevel);
+            sizeMultiplier -= Time.deltaTime * speed;
+            transform.localScale = new Vector3(sizeMultiplier, sizeMultiplier, 1);
             yield return null;
         }
     }

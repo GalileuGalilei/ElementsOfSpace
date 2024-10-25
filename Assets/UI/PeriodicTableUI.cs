@@ -11,13 +11,10 @@ public class PeriodicTableUI : MonoBehaviour
     private GameObject elementUIPrefab;
     private int elementHeight;
     private int elementWidth;
+    private HashSet<string> foundElements = new();
 
     private RectTransform rectTransform;
-
     public float fadeLevel = 0.5f;
-
-    //lista de animacoes para serem executadas em sequencia
-    private List<IEnumerator> animations = new List<IEnumerator>();
 
 
     void Start()
@@ -30,45 +27,22 @@ public class PeriodicTableUI : MonoBehaviour
 
         BuildPeriodicTableUI();
     }
-
-    public void FoundElement(string symbol)
+    /*
+    private void Update()
     {
-        //fade in the table and after coroutine ends, fade out the table
-        
-
-
+        if (Input.touchCount > 0)
+        {
+            FoundElement("Fe", 2, 1.5f, 2, 1.5f);
+        }
+    }
+    */
+    public void FoundElement(string symbol, float foundAnimationTime, float fadeInTime, float keepOnScreenTime, float fadeOutTime)
+    {
+        foundElements.Add(symbol);
         ElementUI elementUI = transform.Find(symbol).GetComponent<ElementUI>();
-        elementUI.StartCoroutine(elementUI.ElementFoundAnimation());
-    }
-
-    private IEnumerator FadeInTable()
-    {
-        float fadeLevel = 0;
-        while (fadeLevel < this.fadeLevel)
-        {
-            fadeLevel += Time.deltaTime;
-            foreach (Transform child in transform)
-            {
-                ElementUI elementUI = child.GetComponent<ElementUI>();
-                elementUI.SetFadeLevel(fadeLevel);
-            }
-            yield return null;
-        }
-    }
-
-    private IEnumerator FadeOutTable()
-    {
-        float fadeLevel = this.fadeLevel;
-        while (fadeLevel > 0)
-        {
-            fadeLevel -= Time.deltaTime;
-            foreach (Transform child in transform)
-            {
-                ElementUI elementUI = child.GetComponent<ElementUI>();
-                elementUI.SetFadeLevel(fadeLevel);
-            }
-            yield return null;
-        }
+        
+        StartCoroutine(elementUI.ElementFoundAnimation(foundAnimationTime));
+        StartCoroutine(FadeInAndOutTable(fadeInTime, keepOnScreenTime, fadeOutTime));
     }
 
     private void BuildPeriodicTableUI()
@@ -86,8 +60,8 @@ public class PeriodicTableUI : MonoBehaviour
             elementUIRect.anchorMax = new Vector2(0, 1);
 
             ElementUI elementUIComponent = elementUI.GetComponent<ElementUI>();
-            elementUIComponent.SetFadeLevel(fadeLevel);
             elementUIComponent.SetColor(GetCategoryColor(element.category));
+            elementUIComponent.SetFadeLevel(0.0f);
             elementUIComponent.SetSymbol(element.symbol);
             elementUI.transform.name = element.symbol;
         }
@@ -122,4 +96,47 @@ public class PeriodicTableUI : MonoBehaviour
                 return new Color(0.7f, 0.7f, 0.5f);
         }
     }
+
+    #region animations
+    private IEnumerator FadeInAndOutTable(float FadeInTime, float keepOnScreenTime, float fadeOutTime)
+    {
+        float fadeLevel = 0;
+        while (fadeLevel < this.fadeLevel)
+        {
+            fadeLevel += Time.deltaTime * FadeInTime;
+            foreach (Transform child in transform)
+            {
+                ElementUI elementUI = child.GetComponent<ElementUI>();
+
+                if (foundElements.Contains(elementUI.Symbol))
+                {
+                    elementUI.SetFadeLevel(1.0f);
+                    continue;
+                }
+
+                elementUI.SetFadeLevel(fadeLevel);
+            }
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(keepOnScreenTime);
+        StartCoroutine(FadeOutTable(fadeOutTime));
+    }
+
+    private IEnumerator FadeOutTable(float speed)
+    {
+        float fadeLevel = this.fadeLevel;
+        while (fadeLevel > 0)
+        {
+            fadeLevel -= Time.deltaTime * speed;
+            foreach (Transform child in transform)
+            {
+                ElementUI elementUI = child.GetComponent<ElementUI>();
+                elementUI.SetFadeLevel(fadeLevel);
+            }
+            yield return null;
+        }
+    }
+
+    #endregion animations
 }
