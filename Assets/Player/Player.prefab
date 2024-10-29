@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2504723954756478813}
   - component: {fileID: 6013770397270218236}
   - component: {fileID: 6084525096371816330}
-  - component: {fileID: 9123295489024080946}
+  - component: {fileID: 2814497767065842354}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -33,9 +33,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.43, y: -3.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_LocalScale: {x: 0.68, y: 0.68, z: 0.68}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 5625519268967514717}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4588652235815152555
@@ -139,13 +140,13 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 6013770397270218236}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -153,9 +154,25 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4e660417-7807-4b41-b896-301a00781cf8
     m_ActionName: 'Player/New action[/DualShock4GamepadHID/leftStick/up,/DualShock4GamepadHID/leftStick/down,/DualShock4GamepadHID/leftStick/left,/DualShock4GamepadHID/leftStick/right,/DualShock4GamepadHID/rightStick/up]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6013770397270218236}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 21640f0e-09ef-4d75-8e74-28f2dd7d880e
+    m_ActionName: Player/Interact
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Move
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &2504723954756478813
@@ -210,8 +227,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &9123295489024080946
-BoxCollider2D:
+--- !u!70 &2814497767065842354
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -244,15 +261,96 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.2666667, y: 2.6}
-    newSize: {x: 1.2666667, y: 2.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1.2666667, y: 2.6}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0.076694526, y: -0.034861352}
+  m_Size: {x: 1.0037776, y: 1.9877777}
+  m_Direction: 0
+--- !u!1001 &4484008424375059634
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 358364568419451168}
+    m_Modifications:
+    - target: {fileID: 1379763697615345813, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_Name
+      value: Drill
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067511205005651064, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: playerRb
+      value: 
+      objectReference: {fileID: 6084525096371816330}
+    - target: {fileID: 7262022546035637241, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_Mass
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262022546035637241, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_UseAutoMass
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.525
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.525
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.237
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+--- !u!4 &5625519268967514717 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8082763000346347247, guid: a893b9ca571ed0e4a8bcf9f7e9ef7b3e, type: 3}
+  m_PrefabInstance: {fileID: 4484008424375059634}
+  m_PrefabAsset: {fileID: 0}

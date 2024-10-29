@@ -1,19 +1,13 @@
 fileFormatVersion: 2
-guid: 5100b2d2936075c4b861a78cdc6f7c18
+guid: 88ec64999abb4f346b587ff87cc02804
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3533253627018313902
-    second: astronaut_idle 1_0
+      213: -383838014632442345
+    second: breaking_0
   - first:
-      213: -6513740463108793835
-    second: astronaut_idle 1_1
-  - first:
-      213: 3042119362323390516
-    second: astronaut_idle 1_2
-  - first:
-      213: -1427231936886582407
-    second: astronaut_idle 1_3
+      213: -8131216158628527515
+    second: breaking_1
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -60,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 15
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -119,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: astronaut_idle 1_0
+      name: breaking_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 21.75
-        height: 34
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,20 +127,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ea089cb2473a80130800000000000000
-      internalID: 3533253627018313902
+      spriteID: 716ca8efb555caaf0800000000000000
+      internalID: -383838014632442345
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: astronaut_idle 1_1
+      name: breaking_1
       rect:
         serializedVersion: 2
-        x: 21
+        x: 8
         y: 0
-        width: 21.75
-        height: 34
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,50 +148,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 51adf416f8b8a95a0800000000000000
-      internalID: -6513740463108793835
+      spriteID: 562c7091cfd182f80800000000000000
+      internalID: -8131216158628527515
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: astronaut_idle 1_2
+      name: breaking_2
       rect:
         serializedVersion: 2
-        x: 42
+        x: 16
         y: 0
-        width: 21.75
-        height: 34
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 430af933177c73a20800000000000000
-      internalID: 3042119362323390516
+      spriteID: f94b8efcf394913478b7fb959f95aeb7
+      internalID: 621778054
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: astronaut_idle 1_3
+      name: breaking_3
       rect:
         serializedVersion: 2
-        x: 63
+        x: 24
         y: 0
-        width: 21.75
-        height: 34
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 97358cd7d14713ce0800000000000000
-      internalID: -1427231936886582407
+      spriteID: 17c5170e686013d4fa8b4d14059be141
+      internalID: 1016745792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: breaking_4
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc2b3e0af6baa924696ff60261937b65
+      internalID: -507173093
       vertices: []
       indices: 
       edges: []
@@ -205,7 +220,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 10a0e3920d68298408c22681ad5c7c7f
+    spriteID: ae064157377bb2444a29f65f013c0f77
     internalID: 0
     vertices: []
     indices: 
@@ -213,10 +228,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      astronaut_idle 1_0: 3533253627018313902
-      astronaut_idle 1_1: -6513740463108793835
-      astronaut_idle 1_2: 3042119362323390516
-      astronaut_idle 1_3: -1427231936886582407
+      breaking_0: -383838014632442345
+      breaking_1: -8131216158628527515
+      breaking_2: 621778054
+      breaking_3: 1016745792
+      breaking_4: -507173093
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

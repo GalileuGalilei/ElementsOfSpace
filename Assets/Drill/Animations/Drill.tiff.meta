@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 5100b2d2936075c4b861a78cdc6f7c18
+guid: 3cc6e9f33349f16479ea50cbc0de9532
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3533253627018313902
-    second: astronaut_idle 1_0
+      213: -3109243678040783027
+    second: RocketDrill_0
   - first:
-      213: -6513740463108793835
-    second: astronaut_idle 1_1
+      213: 2588816914577825261
+    second: RocketDrill_1
   - first:
-      213: 3042119362323390516
-    second: astronaut_idle 1_2
+      213: -1460479460156846470
+    second: RocketDrill_2
   - first:
-      213: -1427231936886582407
-    second: astronaut_idle 1_3
+      213: -9051926841657270651
+    second: RocketDrill_3
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -107,7 +107,7 @@ TextureImporter:
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 50
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -119,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: astronaut_idle 1_0
+      name: RocketDrill_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 21.75
-        height: 34
+        x: 3
+        y: 5
+        width: 20
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,20 +133,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ea089cb2473a80130800000000000000
-      internalID: 3533253627018313902
+      spriteID: d47004a295fb9d4d0800000000000000
+      internalID: -3109243678040783027
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: astronaut_idle 1_1
+      name: RocketDrill_1
       rect:
         serializedVersion: 2
-        x: 21
-        y: 0
-        width: 21.75
-        height: 34
+        x: 33
+        y: 6
+        width: 20
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,20 +154,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 51adf416f8b8a95a0800000000000000
-      internalID: -6513740463108793835
+      spriteID: ded1fe584435de320800000000000000
+      internalID: 2588816914577825261
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: astronaut_idle 1_2
+      name: RocketDrill_2
       rect:
         serializedVersion: 2
-        x: 42
-        y: 0
-        width: 21.75
-        height: 34
+        x: 64
+        y: 6
+        width: 20
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,20 +175,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 430af933177c73a20800000000000000
-      internalID: 3042119362323390516
+      spriteID: a7ec89f3ba55bbbe0800000000000000
+      internalID: -1460479460156846470
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: astronaut_idle 1_3
+      name: RocketDrill_3
       rect:
         serializedVersion: 2
-        x: 63
-        y: 0
-        width: 21.75
-        height: 34
+        x: 92
+        y: 5
+        width: 20
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -196,8 +196,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 97358cd7d14713ce0800000000000000
-      internalID: -1427231936886582407
+      spriteID: 58ed1362f78116280800000000000000
+      internalID: -9051926841657270651
       vertices: []
       indices: 
       edges: []
@@ -205,7 +205,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 10a0e3920d68298408c22681ad5c7c7f
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -213,10 +213,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      astronaut_idle 1_0: 3533253627018313902
-      astronaut_idle 1_1: -6513740463108793835
-      astronaut_idle 1_2: 3042119362323390516
-      astronaut_idle 1_3: -1427231936886582407
+      RocketDrill_0: -3109243678040783027
+      RocketDrill_1: 2588816914577825261
+      RocketDrill_2: -1460479460156846470
+      RocketDrill_3: -9051926841657270651
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

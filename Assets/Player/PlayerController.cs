@@ -8,25 +8,33 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 5f;
 
-    private InputAction moveAction;
     private Rigidbody2D rb;
+    private DrillController drillController;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        moveAction = new InputAction(binding: "<Gamepad>/leftStick");
-        moveAction.Enable();
+        drillController = GetComponentInChildren<DrillController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 dir = moveAction.ReadValue<Vector2>();
+        Vector2 dir = context.ReadValue<Vector2>();
         rb.velocity = dir * moveSpeed;
     }
 
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        //if started
+        if (context.started)
+        {
+            drillController.Use();
+        }
 
+        //if canceled
+        if (context.canceled)
+        {
+            drillController.Stop();
+        }
+    }
 }
