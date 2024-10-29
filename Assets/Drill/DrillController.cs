@@ -15,42 +15,51 @@ public class DrillController : MonoBehaviour
     private BreakingAnimation breakingAnimationPrefab;
     private BreakingAnimation breakingAnimation;
 
+    //in order to avoid the need of multiple clicks
     private bool keepDigging = false;
+
+    //pivot to perform the rotation arround player
+    private Transform pivot;
+
+    private Vector2 facingDirection;
 
     private void Start()
     {
         tilemap = FindAnyObjectByType<Tilemap>();
+        pivot = transform.parent;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        Vector3 parentPivot = transform.parent.position;
-        Vector3 diff = transform.position - parentPivot;
-
-        diff.x = Mathf.Abs(diff.x);
-        diff.y = 0f;
-        diff.z = 0f;
-
-
-        if (playerRb.velocity.x > 0)
-        {
-            transform.position = parentPivot + diff;
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
+        AvoidBlockOverlap();
         
-        if (playerRb.velocity.x < 0)
+        if (playerRb.velocity.magnitude > 0)
         {
-            transform.position = parentPivot - diff;
-            transform.rotation = Quaternion.Euler(0, 0, 180);
+            pivot.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(playerRb.velocity.y, playerRb.velocity.x) * Mathf.Rad2Deg);
+            facingDirection = playerRb.velocity.normalized;
         }
 
-        if(keepDigging)
+        if (keepDigging)
         {
             keepDigging = false;
             Use();
         }
     }
 
+    private void AvoidBlockOverlap()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(pivot.position, facingDirection, drillRange, LayerMask.GetMask("Block"));
+        if (hit.collider != null)
+        {
+            Vector2 localHit = transform.worldToLocalMatrix.MultiplyPoint(hit.point);
+            transform.localPosition = localHit;
+
+        }
+        else
+        {
+            transform.localPosition = new Vector3(drillRange, 0, 0);
+        }
+    }
 
     private void OnDestroyBlock(Vector3Int cellPosition)
     {
@@ -60,7 +69,8 @@ public class DrillController : MonoBehaviour
 
     public void Use()
     {
-        Vector3Int cellPosition = tilemap.WorldToCell(transform.position);
+        Vector3 worldPos = new Vector3(facingDirection.x, facingDirection.y) * tilemap.cellSize.x * 0.5f + transform.position;
+        Vector3Int cellPosition = tilemap.WorldToCell(worldPos);
 
         if (tilemap.GetTile(cellPosition) == null)
         {
