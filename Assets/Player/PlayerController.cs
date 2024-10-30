@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private DrillController drillController;
 
+    public Vector2 facingDirection { get; private set; }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -22,6 +24,13 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 dir = context.ReadValue<Vector2>();
         rb.velocity = dir * moveSpeed;
+        
+        if(context.canceled)
+        {
+            return;
+        }
+
+        facingDirection = dir;
     }
 
     public void OnInteract(InputAction.CallbackContext context)

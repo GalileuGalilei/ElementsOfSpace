@@ -10,10 +10,11 @@ public class DrillController : MonoBehaviour
     private Tilemap tilemap;
 
     [SerializeField]
-    private Rigidbody2D playerRb;
+    private PlayerController player;
     [SerializeField]
     private BreakingAnimation breakingAnimationPrefab;
     private BreakingAnimation breakingAnimation;
+    private Animator animator;
 
     //in order to avoid the need of multiple clicks
     private bool keepDigging = false;
@@ -21,23 +22,17 @@ public class DrillController : MonoBehaviour
     //pivot to perform the rotation arround player
     private Transform pivot;
 
-    private Vector2 facingDirection;
-
     private void Start()
     {
         tilemap = FindAnyObjectByType<Tilemap>();
+        animator = GetComponent<Animator>();
         pivot = transform.parent;
     }
 
     private void FixedUpdate()
     {
         AvoidBlockOverlap();
-        
-        if (playerRb.velocity.magnitude > 0)
-        {
-            pivot.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(playerRb.velocity.y, playerRb.velocity.x) * Mathf.Rad2Deg);
-            facingDirection = playerRb.velocity.normalized;
-        }
+        pivot.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(player.facingDirection.y, player.facingDirection.x) * Mathf.Rad2Deg);
 
         if (keepDigging)
         {
@@ -46,30 +41,10 @@ public class DrillController : MonoBehaviour
         }
     }
 
-    private void AvoidBlockOverlap()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(pivot.position, facingDirection, drillRange, LayerMask.GetMask("Block"));
-        if (hit.collider != null)
-        {
-            Vector2 localHit = transform.worldToLocalMatrix.MultiplyPoint(hit.point);
-            transform.localPosition = localHit;
-
-        }
-        else
-        {
-            transform.localPosition = new Vector3(drillRange, 0, 0);
-        }
-    }
-
-    private void OnDestroyBlock(Vector3Int cellPosition)
-    {
-        tilemap.SetTile(cellPosition, null);
-        keepDigging = true;
-    }
-
     public void Use()
     {
-        Vector3 worldPos = new Vector3(facingDirection.x, facingDirection.y) * tilemap.cellSize.x * 0.5f + transform.position;
+        SetState(1);
+        Vector3 worldPos = new Vector3(player.facingDirection.x, player.facingDirection.y) * tilemap.cellSize.x * 0.5f + transform.position;
         Vector3Int cellPosition = tilemap.WorldToCell(worldPos);
 
         if (tilemap.GetTile(cellPosition) == null)
@@ -89,5 +64,33 @@ public class DrillController : MonoBehaviour
         {
             Destroy(breakingAnimation.gameObject);
         }
+
+        SetState(0);
+    }
+
+    private void OnDestroyBlock(Vector3Int cellPosition)
+    {
+        tilemap.SetTile(cellPosition, null);
+        keepDigging = true;
+    }
+
+    private void AvoidBlockOverlap()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(pivot.position, player.facingDirection, drillRange, LayerMask.GetMask("Block"));
+        if (hit.collider != null)
+        {
+            Vector2 localHit = pivot.worldToLocalMatrix.MultiplyPoint(hit.point);
+            transform.localPosition = localHit;
+
+        }
+        else
+        {
+            transform.localPosition = new Vector3(drillRange, 0, 0);
+        }
+    }
+
+    private void SetState(int state)
+    {
+        animator.SetInteger("State", state);
     }
 }
