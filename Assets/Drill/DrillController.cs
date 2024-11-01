@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class DrillController : MonoBehaviour
 
     //in order to avoid the need of multiple clicks
     private bool keepDigging = false;
+    private Action<Vector3Int> keepOnDestroyBlock;
 
     //pivot to perform the rotation arround player
     private Transform pivot;
@@ -37,24 +39,34 @@ public class DrillController : MonoBehaviour
         if (keepDigging)
         {
             keepDigging = false;
-            Use();
+            Use(keepOnDestroyBlock);
         }
     }
 
-    public void Use()
+    public void Use(Action<Vector3Int> OnDestroyBlock)
     {
+        //seta a animação de perfuração
         SetState(1);
+
+        //encontra a posição do bloco a ser destruído
         Vector3 worldPos = new Vector3(player.facingDirection.x, player.facingDirection.y) * tilemap.cellSize.x * 0.5f + transform.position;
         Vector3Int cellPosition = tilemap.WorldToCell(worldPos);
 
+        //se não houver bloco, salva as informações para continuar a perfuração no Update()
         if (tilemap.GetTile(cellPosition) == null)
         {
             keepDigging = true;
+            keepOnDestroyBlock = OnDestroyBlock;
             return;
         }
 
+        //se houver bloco, inicia a animação de perfuração e ao final chama o evento de destruição
         breakingAnimation = Instantiate(breakingAnimationPrefab, tilemap.GetCellCenterWorld(cellPosition), Quaternion.identity);
-        breakingAnimation.onAnimationFinish.AddListener(() => OnDestroyBlock(cellPosition));
+        breakingAnimation.onAnimationFinish.AddListener(() =>
+        {
+            OnDestroyBlock(cellPosition);
+            keepDigging = true;
+        });
     }
 
     public void Stop()
@@ -66,12 +78,6 @@ public class DrillController : MonoBehaviour
         }
 
         SetState(0);
-    }
-
-    private void OnDestroyBlock(Vector3Int cellPosition)
-    {
-        tilemap.SetTile(cellPosition, null);
-        keepDigging = true;
     }
 
     private void AvoidBlockOverlap()

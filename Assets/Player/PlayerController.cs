@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private DrillController drillController;
+    private Tilemap tilemap;
+    private PeriodicTable periodicTable;
 
     public Vector2 facingDirection { get; private set; }
 
@@ -18,6 +21,8 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         drillController = GetComponentInChildren<DrillController>();
+        tilemap = FindAnyObjectByType<Tilemap>();
+        periodicTable = FindAnyObjectByType<PeriodicTable>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -38,7 +43,7 @@ public class PlayerController : MonoBehaviour
         //if started
         if (context.started)
         {
-            drillController.Use();
+            drillController.Use(OnDestroyBlock);
         }
 
         //if canceled
@@ -46,5 +51,13 @@ public class PlayerController : MonoBehaviour
         {
             drillController.Stop();
         }
+    }
+
+    private void OnDestroyBlock(Vector3Int cellPosition)
+    {
+        string symbol = tilemap.GetTile(cellPosition).name;
+        periodicTable.FoundElement(symbol, 2f, 1f, 2f, 0.5f);
+
+        tilemap.SetTile(cellPosition, null);
     }
 }

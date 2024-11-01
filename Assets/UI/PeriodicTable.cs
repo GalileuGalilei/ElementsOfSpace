@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class PeriodicTableUI : MonoBehaviour
+public class PeriodicTable : MonoBehaviour
 {
     [SerializeField]
     private GameObject elementUIPrefab;
@@ -16,6 +16,7 @@ public class PeriodicTableUI : MonoBehaviour
     private RectTransform rectTransform;
     public float fadeLevel = 0.5f;
 
+    private bool shown = false;
 
     void Start()
     {
@@ -27,17 +28,39 @@ public class PeriodicTableUI : MonoBehaviour
 
         BuildPeriodicTableUI();
     }
-    /*
-    private void Update()
+
+    public void Show()
     {
-        if (Input.touchCount > 0)
+        shown = !shown;
+        
+        foreach (Transform child in transform)
         {
-            FoundElement("Fe", 2, 1.5f, 2, 1.5f);
+            ElementUI elementUI = child.GetComponent<ElementUI>();
+
+            if (shown)
+            {
+                if (foundElements.Contains(elementUI.Symbol))
+                {
+                    elementUI.SetFadeLevel(1.0f);
+                    continue;
+                }
+
+                elementUI.SetFadeLevel(fadeLevel);
+            }
+            else
+            {
+                elementUI.SetFadeLevel(0f);
+            }
         }
     }
-    */
+
     public void FoundElement(string symbol, float foundAnimationTime, float fadeInTime, float keepOnScreenTime, float fadeOutTime)
     {
+        if (foundElements.Contains(symbol))
+        { 
+            return;
+        }
+        
         foundElements.Add(symbol);
         ElementUI elementUI = transform.Find(symbol).GetComponent<ElementUI>();
         
@@ -47,7 +70,7 @@ public class PeriodicTableUI : MonoBehaviour
 
     private void BuildPeriodicTableUI()
     {
-        PeriodicTable table = PeriodicTable.Instance;
+        PeriodicTableLoader table = PeriodicTableLoader.Instance;
 
         foreach (Element element in table.elements)
         {
@@ -136,6 +159,8 @@ public class PeriodicTableUI : MonoBehaviour
             }
             yield return null;
         }
+
+        shown = false;
     }
 
     #endregion animations

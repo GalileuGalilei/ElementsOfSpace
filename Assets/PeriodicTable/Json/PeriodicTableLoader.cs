@@ -16,22 +16,22 @@ internal struct ElementCollection
     public List<Element> elements;
 }
 
-public class PeriodicTable
+public class PeriodicTableLoader
 {
     public List<Element> elements = new();
     private const string jsonDataPath = "PeriodicTable";
 
-    static PeriodicTable instance;
-    public static PeriodicTable Instance
+    static PeriodicTableLoader instance;
+    public static PeriodicTableLoader Instance
     {
         get
         {
-            instance ??= new PeriodicTable();
+            instance ??= new PeriodicTableLoader();
             return instance;
         }
     }
 
-    public PeriodicTable()
+    public PeriodicTableLoader()
     {
         LoadData();
     }
