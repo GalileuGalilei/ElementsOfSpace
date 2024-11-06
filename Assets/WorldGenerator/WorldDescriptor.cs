@@ -7,10 +7,11 @@ using UnityEngine.U2D;
 /// <summary>
 /// Class that describes the world, with its width, height, and the rarity of each element.
 /// </summary>
+[System.Serializable]
 public class WorldDescriptor : ScriptableObject
 {
     [System.Serializable]
-    internal class ElementRarity
+    public class ElementRarity
     {
         public string ElementSymbol;
         public float rarity;
@@ -48,6 +49,16 @@ public class WorldDescriptor : ScriptableObject
         }
     }
 
+    private void OnValidate()
+    {
+        LoadAndGenerateTiles();
+    }
+
+    private void Awake()
+    {
+        LoadAndGenerateTiles();
+    }
+
 #if UNITY_EDITOR
     [MenuItem("Assets/Create/World Descriptor")]
     public static void CreateWorldDescriptorAsset()
@@ -60,9 +71,5 @@ public class WorldDescriptor : ScriptableObject
         Selection.activeObject = asset;
     }
 
-    private void OnValidate()
-    {
-        LoadAndGenerateTiles();
-    }
 #endif
 }

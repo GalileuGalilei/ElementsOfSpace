@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d4c89f318ca8e449c3960d18a7d5ac, type: 3}
   m_Name: Mars
   m_EditorClassIdentifier: 
-  width: 30
-  height: 10
+  width: 300
+  height: 40
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
   elementRarity:
   - ElementSymbol: C
