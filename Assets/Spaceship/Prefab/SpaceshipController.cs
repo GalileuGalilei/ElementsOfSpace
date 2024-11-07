@@ -38,11 +38,6 @@ public class SpaceshipController : MonoBehaviour
             return;
         }
 
-        if(transform.position.y < 1)
-        {
-            onGround = true;
-        }
-
         player.transform.position = transform.position;
 
         //as if approuchs the ground, the spaceship will slow down. It uses raycast to detect the ground

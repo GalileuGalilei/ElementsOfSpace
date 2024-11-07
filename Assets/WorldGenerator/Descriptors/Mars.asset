@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Mars
   m_EditorClassIdentifier: 
   width: 300
-  height: 40
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
-  elementRarity:
-  - ElementSymbol: C
-    rarity: 0.5
+  elementLayerHeight:
   - ElementSymbol: Cu
-    rarity: 0.2
+    layerHeight: -40
   - ElementSymbol: Au
-    rarity: 0.1
+    layerHeight: -30
+  - ElementSymbol: Al
+    layerHeight: -20
+  - ElementSymbol: C
+    layerHeight: 0

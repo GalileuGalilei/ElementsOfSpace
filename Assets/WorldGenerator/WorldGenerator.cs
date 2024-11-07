@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
@@ -11,9 +12,14 @@ public class WorldGenerator : MonoBehaviour
     [SerializeField]
     WorldDescriptor worldDescriptor;
 
-    private int width, height;
-    private List<(Tile, float)> tilesPerRarity;
-    private List<Tile> cumulativeTiles;
+    [SerializeField]
+    float noiseScale = 0.03f;
+
+    private int[] surface;
+
+    private int width;
+    private int minHeight, maxHeight;
+    private List<(Tile, int)> tilesPerLayerHeight;
 
     void Start()
     {
@@ -23,65 +29,62 @@ public class WorldGenerator : MonoBehaviour
             return;
         }
 
-        width = worldDescriptor.width;
-        height = worldDescriptor.height;
-        tilesPerRarity = worldDescriptor.TilesPerRarity;
-
-        PrecomputeTileSelection();
+        //PrecomputeTileSelection();
+        CalculateWorldBounds();
         GenerateWorld();
     }
 
-    public void GenerateWorld()
+    private void CalculateWorldBounds()
     {
-        if (tilesPerRarity == null || tilesPerRarity.Count == 0)
+        tilesPerLayerHeight = worldDescriptor.TilesPerLayerHeight;
+        width = worldDescriptor.width;
+        surface = new int[width];
+
+        foreach (var tile in tilesPerLayerHeight)
         {
-            Debug.LogError("TilesPerRarity list is empty.");
-            return;
-        }
-
-        // Set ground level around y = 0
-        int groundLevel = 0;
-
-        // Loop over each tile position in the map width and height
-        for (int x = 0; x < width; x++)
-        {
-            // Generate a random height offset for each column to create mountain peaks
-            int columnHeight = (int)(groundLevel + Mathf.PerlinNoise(x * 0.1f, 0) * height / 2 - height / 4);
-
-            for (int y = -height / 2; y <= columnHeight; y++)
+            if (tile.Item2 < minHeight)
             {
-                // Select a tile based on rarity
-                Tile selectedTile = GetTileByRarity();
+                minHeight = tile.Item2;
+            }
 
-                // Place the tile on the Tilemap
-                tilemap.SetTile(new Vector3Int(x - width / 2, y, 0), selectedTile);
+            if (tile.Item2 > maxHeight)
+            {
+                maxHeight = tile.Item2;
             }
         }
     }
 
-    private void PrecomputeTileSelection()
+    private void GenerateWorld()
     {
-        cumulativeTiles = new List<Tile>();
+        GenerateWorldLayers(width, tilesPerLayerHeight);
+        //GenerateTilesChuncks()
+        //GenerateWorldCaves()
+    }
 
-        foreach (var tileRarity in tilesPerRarity)
+    //generate the world based on the layers separeted by their heights
+    private void GenerateWorldLayers(int width, List<(Tile, int)> tilesPerLayerHeight)
+    {
+
+        for (int x = -width / 2; x < width / 2; x++)
         {
-            int count = Mathf.RoundToInt(tileRarity.Item2 * 100); // Scale the rarity to get an integer count
-            for (int i = 0; i < count; i++)
+            float noiseValue = Mathf.PerlinNoise(x * noiseScale, 0);
+            int currentHeight = tilesPerLayerHeight[0].Item2;
+
+            for (int i = 0; i < tilesPerLayerHeight.Count; i++)
             {
-                cumulativeTiles.Add(tileRarity.Item1);
+                int columnHeight = Mathf.Abs((int)((tilesPerLayerHeight[i].Item2 - currentHeight) * noiseValue) + 1);
+
+                for (int y = currentHeight; y < currentHeight + columnHeight; y++)
+                {
+                    tilemap.SetTile(tilemap.WorldToCell(new Vector3Int(x, y, 0)), tilesPerLayerHeight[i].Item1);
+                }
+                currentHeight += columnHeight;
             }
+
+            surface[x + width / 2] = currentHeight;
         }
     }
 
-    private Tile GetTileByRarity()
-    {
-        if (cumulativeTiles.Count == 0)
-        {
-            Debug.LogError("Cumulative tiles list is empty. Did you forget to call PrecomputeTileSelection?");
-            return null;
-        }
+    
 
-        int randomIndex = Random.Range(0, cumulativeTiles.Count);
-        return cumulativeTiles[randomIndex];
-    }
 }

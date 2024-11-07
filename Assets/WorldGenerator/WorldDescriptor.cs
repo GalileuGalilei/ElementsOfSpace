@@ -5,25 +5,26 @@ using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 
 /// <summary>
-/// Class that describes the world, with its width, height, and the rarity of each element.
+/// Class that describes the world, with terrain layers and their rarity.
 /// </summary>
 [System.Serializable]
 public class WorldDescriptor : ScriptableObject
 {
     [System.Serializable]
-    public class ElementRarity
+    public class ElementLayerHeight
     {
         public string ElementSymbol;
-        public float rarity;
+        public int layerHeight;
     }
 
-    public int width, height;
+    public int width;
+
     [SerializeField]
     private SpriteAtlas atlas;
     [SerializeField]
-    private List<ElementRarity> elementRarity;
+    private List<ElementLayerHeight> elementLayerHeight;
     
-    public List<(Tile, float)> TilesPerRarity;
+    public List<(Tile, int)> TilesPerLayerHeight;
 
     public WorldDescriptor()
     {
@@ -32,20 +33,20 @@ public class WorldDescriptor : ScriptableObject
 
     private void LoadAndGenerateTiles()
     {
-        if (atlas == null || elementRarity == null || elementRarity.Count == 0)
+        if (atlas == null || elementLayerHeight == null || elementLayerHeight.Count == 0)
         {
             return;
         }
-        
-        TilesPerRarity = new List<(Tile, float)>();
 
-        foreach (ElementRarity er in elementRarity)
+        TilesPerLayerHeight = new List<(Tile, int)>();
+
+        foreach (ElementLayerHeight elem in elementLayerHeight)
         {
-            Sprite sprite = atlas.GetSprite(er.ElementSymbol);
+            Sprite sprite = atlas.GetSprite(elem.ElementSymbol);
             Tile tile = ScriptableObject.CreateInstance<Tile>();
             tile.sprite = sprite;
-            tile.name = er.ElementSymbol;
-            TilesPerRarity.Add((tile, er.rarity));
+            tile.name = elem.ElementSymbol;
+            TilesPerLayerHeight.Add((tile, elem.layerHeight));
         }
     }
 
