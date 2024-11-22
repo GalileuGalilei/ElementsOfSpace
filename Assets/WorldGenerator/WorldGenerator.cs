@@ -9,8 +9,6 @@ public class WorldGenerator : MonoBehaviour
 {
     [SerializeField]
     Tilemap tilemap;
-    [SerializeField]
-    WorldDescriptor worldDescriptor;
 
     [SerializeField]
     float noiseScale = 0.03f;
@@ -21,20 +19,7 @@ public class WorldGenerator : MonoBehaviour
     private int minHeight, maxHeight;
     private List<(Tile, int)> tilesPerLayerHeight;
 
-    void Start()
-    {
-        if (worldDescriptor == null)
-        {
-            Debug.LogError("WorldDescriptor is not set");
-            return;
-        }
-
-        //PrecomputeTileSelection();
-        CalculateWorldBounds();
-        GenerateWorld();
-    }
-
-    private void CalculateWorldBounds()
+    private void CalculateWorldBounds(WorldDescriptor worldDescriptor)
     {
         tilesPerLayerHeight = worldDescriptor.TilesPerLayerHeight;
         width = worldDescriptor.width;
@@ -54,14 +39,21 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateWorld()
+    public void GenerateWorld(WorldDescriptor worldDescriptor, PlanetData planetData)
     {
+        Random.InitState(planetData.seed.GetHashCode());
+
+        ResetWorld();
+        CalculateWorldBounds(worldDescriptor);
         GenerateWorldLayers(width, tilesPerLayerHeight);
-        //GenerateTilesChuncks()
-        //GenerateWorldCaves()
+        //GenerateWorldOres();
+        //GenerateWorldCaves();
+        //AddPlanetData(planetData);
     }
 
-    //generate the world based on the layers separeted by their heights
+    /// <summary>
+    /// generate the world based on the layers separeted by their heights
+    /// </summary>
     private void GenerateWorldLayers(int width, List<(Tile, int)> tilesPerLayerHeight)
     {
 
@@ -85,6 +77,8 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    
-
+    private void ResetWorld()
+    {
+        tilemap.ClearAllTiles();
+    }
 }

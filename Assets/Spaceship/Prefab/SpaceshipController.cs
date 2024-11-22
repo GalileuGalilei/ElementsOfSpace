@@ -10,10 +10,10 @@ public class SpaceshipController : MonoBehaviour
 {
     [SerializeField]
     private float deacceleration = 0.1f;
-    [SerializeField]
-    private GameObject player;
+    
     private Rigidbody2D rb;
     private bool onGround = false;
+    private PlayerController player = null;
     private ParticleSystem particle;
 
     private void Start()
@@ -38,9 +38,7 @@ public class SpaceshipController : MonoBehaviour
             return;
         }
 
-        player.transform.position = transform.position;
-
-        //as if approuchs the ground, the spaceship will slow down. It uses raycast to detect the ground
+        //as it approuchs the ground, the spaceship will slow down. It uses raycast to detect the ground
         RaycastHit2D hit;
         hit = Physics2D.Raycast(transform.position, Vector3.down, 100, LayerMask.GetMask("Block"));
         float distance = hit.distance;
@@ -48,6 +46,18 @@ public class SpaceshipController : MonoBehaviour
         {
             rb.AddForce(Vector2.up * deacceleration * rb.velocity.magnitude);    
         }
+
+        if(player == null)
+        {
+            return;
+        }
+
+        player.transform.position = transform.position;
         
+    }
+     
+    public void SetPlayer(PlayerController player)
+    {
+        this.player = player;
     }
 }

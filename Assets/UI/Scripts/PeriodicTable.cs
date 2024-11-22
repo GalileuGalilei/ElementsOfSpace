@@ -11,7 +11,7 @@ public class PeriodicTable : MonoBehaviour
     private GameObject elementUIPrefab;
     private int elementHeight;
     private int elementWidth;
-    private HashSet<string> foundElements = new();
+    public HashSet<string> foundElements { get; private set; } = new();
 
     private RectTransform rectTransform;
     public float fadeLevel = 0.5f;

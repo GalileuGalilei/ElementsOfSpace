@@ -23,7 +23,7 @@ public class PlanetUIController : MonoBehaviour
     {
         planetDescription.SetActive(false);
         //animator.Play("Enter");
-        SceneManager.LoadScene("PlanetScene");
+        GameManager.Instance.InitializePlanet(planetName);
     }
 
     public void ZoomIn()
