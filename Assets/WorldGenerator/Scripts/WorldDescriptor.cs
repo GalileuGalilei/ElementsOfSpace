@@ -17,14 +17,37 @@ public class WorldDescriptor : ScriptableObject
         public int layerHeight;
     }
 
+    [System.Serializable]
+    public class ElementChunk
+    {
+        public string ElementSymbol;
+        public int chunkSize;
+        public int rarity;
+    }
+
+    [System.Serializable]
+    public class CaveAutomataParams
+    {
+        public int birthLimit;
+        public int deathLimit;
+        public int numberOfSteps;
+        public float chanceToStartAlive;
+    }
+
     public int width;
 
     [SerializeField]
     private SpriteAtlas atlas;
     [SerializeField]
     private List<ElementLayerHeight> elementLayerHeight;
-    
+    [SerializeField]
+    private List<ElementChunk> elementChunks;
+
+    [SerializeField]
+    public CaveAutomataParams caveAutomataParams;
+
     public List<(Tile, int)> TilesPerLayerHeight;
+    public List<(Tile, int, int)> TileSizeRarityChuncks;
 
     public WorldDescriptor()
     {
@@ -39,6 +62,7 @@ public class WorldDescriptor : ScriptableObject
         }
 
         TilesPerLayerHeight = new List<(Tile, int)>();
+        TileSizeRarityChuncks = new List<(Tile, int, int)>();
 
         foreach (ElementLayerHeight elem in elementLayerHeight)
         {
@@ -47,6 +71,15 @@ public class WorldDescriptor : ScriptableObject
             tile.sprite = sprite;
             tile.name = elem.ElementSymbol;
             TilesPerLayerHeight.Add((tile, elem.layerHeight));
+        }
+
+        foreach (ElementChunk elem in elementChunks)
+        {
+            Sprite sprite = atlas.GetSprite(elem.ElementSymbol);
+            Tile tile = ScriptableObject.CreateInstance<Tile>();
+            tile.sprite = sprite;
+            tile.name = elem.ElementSymbol;
+            TileSizeRarityChuncks.Add((tile, elem.chunkSize, elem.rarity));
         }
     }
 

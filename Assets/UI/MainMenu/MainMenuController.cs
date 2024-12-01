@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    public void StartGame()
+    [SerializeField]
+    private Image loadGameButton;
+
+    private void Start()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        if (!GameManager.Instance.CheckPlayerData())
+        {
+            loadGameButton.color = Color.gray;
+            loadGameButton.GetComponent<Button>().interactable = false;
+        }
     }
 
     public void ExitGame()
     {
         Application.Quit();
-    }
-
-    public void LoadGame()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 }

@@ -46,9 +46,9 @@ public class WorldGenerator : MonoBehaviour
         ResetWorld();
         CalculateWorldBounds(worldDescriptor);
         GenerateWorldLayers(width, tilesPerLayerHeight);
-        //GenerateWorldOres();
+        GenerateTileChuncks(worldDescriptor.TileSizeRarityChuncks);
         //GenerateWorldCaves();
-        //AddPlanetData(planetData);
+        AddPlanetData(planetData);
     }
 
     /// <summary>
@@ -74,6 +74,36 @@ public class WorldGenerator : MonoBehaviour
             }
 
             surface[x + width / 2] = currentHeight;
+        }
+    }
+
+    //generate chunks of tiles, like ores
+    private void GenerateTileChuncks(List<(Tile, int, int)> TileSizeRarityChuncks)
+    {
+        int step = 10;
+
+        //generate chunks bellow surface heights
+        for (int x = -width / 2; x < width / 2; x += step)
+        {
+            for (int y = 0; y < surface[x + width / 2]; y += step)
+            {
+                foreach (var tile in TileSizeRarityChuncks)
+                {
+                    if (Random.Range(0, 100) < tile.Item3)
+                    {
+                        //Automata(tileset, tile)
+                    }
+                }
+            }
+        }
+    }
+
+    //loas which blocks were destroyed in the planet in the last save
+    private void AddPlanetData(PlanetData planetData)
+    {
+        foreach (var block in planetData.destroyedBlocks)
+        {
+            tilemap.SetTile(new Vector3Int(block[0], block[1], 0), null);
         }
     }
 

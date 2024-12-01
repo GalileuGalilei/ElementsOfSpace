@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using Cinemachine;
+using UnityEngine.Events;
+using System.Collections;
 
 /// <summary>
 /// Game Manager. The object containing this script is responsible for saving and loading game data, and initializing the game.
@@ -15,6 +18,8 @@ public class GameManager : MonoBehaviour
     private PlanetData planetData;
     private static GameManager instance = null;
 
+    [SerializeField]
+    WorldGenerator worldGeneratorPrefab;
     [SerializeField]
     PlayerController playerPrefab;
     [SerializeField]
@@ -41,7 +46,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        TryLoadPlayerData();
+        HasSavedGameData = CheckPlayerData();
     }
 
     /// <summary>
@@ -79,73 +84,48 @@ public class GameManager : MonoBehaviour
     public void SavePlanetData()
     {
         string json = JsonConvert.SerializeObject(planetData);
-        System.IO.File.WriteAllText(Application.persistentDataPath + "/" + planetDataPath, json);
+        string path = Application.persistentDataPath + "/" + planetData.name + planetDataPath;
+        System.IO.File.WriteAllText(path, json);
     }
 
     /// <summary>
-    /// Generates a new world and loads saved data from that planet
+    /// Clears all previus player and planet data
     /// </summary>
-    public void InitializePlanet(string planetName)
+    public void ResetGame()
     {
-        CurrentPlanet = planetName;
-        string planetDataPath = Application.persistentDataPath + "/" + planetName + ".json";
+        ClearPlayerData();
+        ClearPlanetsData();
+    }
 
-        if (System.IO.File.Exists(planetDataPath))
+    /// <summary>
+    /// Clears player data
+    /// </summary>
+    public void ClearPlayerData()
+    {
+        if(HasSavedGameData)
         {
-            string json = System.IO.File.ReadAllText(planetDataPath);
-            planetData = JsonConvert.DeserializeObject<PlanetData>(json);
+            HasSavedGameData = false;
         }
         else
         {
-            string seed = Random.Range(0, 1000000).ToString();
-            planetData = new PlanetData(planetName, seed);
-        }
-
-        SceneManager.LoadScene("PlanetScene");
-        WorldGenerator generator = GameObject.Find("WorldGenerator").GetComponent<WorldGenerator>();
-
-        if (generator == null)
-        {
-            Debug.LogError("WorldGenerator not found");
             return;
         }
 
-        WorldDescriptor descriptor = Resources.Load<WorldDescriptor>(planetName);
-
-        if (descriptor == null)
-        {
-            Debug.LogError("WorldDescriptor not found");
-            return;
-        }
-
-        generator.GenerateWorld(descriptor, planetData);
-
-        //this should be here?
-        InitializePlayerData();
+        System.IO.File.Delete(Application.persistentDataPath + "/" + playerDataPath);
     }
 
     /// <summary>
-    /// Instantiates player and spaceship, and sets their positions to the saved data if there is any
+    /// Clears all planets data
     /// </summary>
-    public void InitializePlayerData()
+    public void ClearPlanetsData()
     {
-        PlayerController player = Instantiate(playerPrefab);
-        SpaceshipController spaceship = Instantiate(spaceshipPrefab);
-        PeriodicTable periodicTable = FindAnyObjectByType<PeriodicTable>();
-
-        if (!HasSavedGameData)
+        string[] files = System.IO.Directory.GetFiles(Application.persistentDataPath);
+        foreach (string file in files)
         {
-            spaceship.SetPlayer(player);
-            spaceship.transform.position = new Vector3(0, 300, 0);
-            return;
-        }
-
-        player.transform.position = new Vector3(playerData.playerPosition[0], playerData.playerPosition[1], 0);
-        spaceship.transform.position = new Vector3(playerData.spaceshipPosition[0], playerData.spaceshipPosition[1], 0);
-
-        foreach (string element in playerData.foundElements)
-        {
-            periodicTable.foundElements.Add(element);
+            if (file.Contains("PlanetData"))
+            {
+                System.IO.File.Delete(file);
+            }
         }
     }
 
@@ -167,16 +147,133 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    private void TryLoadPlayerData()
+    /// <summary>
+    /// Asyncronously loads a new game scene and initializes the planet and player. It there were previus data, deletes it.
+    /// </summary>
+    /// <param name="planetName"></param>
+    public void LoadNewGame(string planetName)
+    {
+        StartCoroutine(LoadNewGameAsync(planetName));
+    }
+
+    /// <summary>
+    /// Asyncronously loads a saved game scene and initializes the last planet that player was in.
+    /// </summary>
+    public void LoadContinueGame()
+    {
+        StartCoroutine(LoadContinueGameAsync());
+    }
+
+    private IEnumerator LoadNewGameAsync(string planetName)
+    {
+        CurrentPlanet = planetName;
+        AsyncOperation sceneLoader = SceneManager.LoadSceneAsync("PlanetScene");
+
+        Debug.Log($"Loading scene planet {planetName}");
+
+        while (!sceneLoader.isDone)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        ResetGame();
+        InitializePlayer();
+        InitializePlanet(planetName);
+    }
+
+    private IEnumerator LoadContinueGameAsync()
+    {
+        AsyncOperation sceneLoader = SceneManager.LoadSceneAsync("PlanetScene");
+
+        while (!sceneLoader.isDone)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        InitializePlayer(); //loads current planet name
+        InitializePlanet(CurrentPlanet);
+    }
+
+    private void InitializePlanet(string planetName)
+    {
+        string path = Application.persistentDataPath + "/" + planetName + planetDataPath;
+
+        if (System.IO.File.Exists(path))
+        {
+            string json = System.IO.File.ReadAllText(path);
+            planetData = JsonConvert.DeserializeObject<PlanetData>(json);
+            Debug.Log("Planet data loaded");
+        }
+        else
+        {
+            string seed = Random.Range(0, 1000000).ToString();
+            planetData = new PlanetData(seed, planetName);
+            Debug.Log("New planet data created");
+        }
+
+        WorldGenerator generator = Instantiate(worldGeneratorPrefab);
+
+        if (generator == null)
+        {
+            Debug.LogError("WorldGenerator not found");
+        }
+
+        WorldDescriptor descriptor = Resources.Load<WorldDescriptor>(planetName);
+
+        if (descriptor == null)
+        {
+            Debug.LogError($"WorldDescriptor {planetName} not found");
+        }
+
+        generator.GenerateWorld(descriptor, planetData);
+    }
+
+    private void InitializePlayer()
+    {
+        PlayerController player = Instantiate(playerPrefab);
+        SpaceshipController spaceship = Instantiate(spaceshipPrefab);
+        PeriodicTable periodicTable = FindAnyObjectByType<PeriodicTable>();
+        CinemachineVirtualCamera camera = FindAnyObjectByType<CinemachineVirtualCamera>();
+
+        camera.Follow = player.transform;
+        camera.LookAt = player.transform;
+
+        if (!HasSavedGameData)
+        {
+            spaceship.SetPlayer(player);
+            spaceship.transform.position = new Vector3(0, 50, 0);
+            return;
+        }
+
+        string json = System.IO.File.ReadAllText(Application.persistentDataPath + "/" + playerDataPath);
+        playerData = JsonConvert.DeserializeObject<PlayerData>(json);
+
+        player.transform.position = new Vector3(playerData.playerPosition[0], playerData.playerPosition[1], 0);
+        spaceship.transform.position = new Vector3(playerData.spaceshipPosition[0], playerData.spaceshipPosition[1], 0);
+
+        //loads last planet player was in
+        CurrentPlanet = playerData.currentPlanet;
+
+        foreach (string element in playerData.foundElements)
+        {
+            periodicTable.foundElements.Add(element);
+        }
+    }
+
+    /// <summary>
+    /// Used only to test if the player data file exists. Used by the main menu to enable or disable the "load game" button
+    /// </summary>
+    public bool CheckPlayerData()
     {
         string path = Application.persistentDataPath + "/" + playerDataPath;
         if (System.IO.File.Exists(path))
         {
-            string json = System.IO.File.ReadAllText(path);
-            PlayerData playerData = JsonUtility.FromJson<PlayerData>(json);
             HasSavedGameData = true;
+            Debug.Log("Player data found");
+            return true;
         }
 
         HasSavedGameData = false;
+        return false;
     }
 }

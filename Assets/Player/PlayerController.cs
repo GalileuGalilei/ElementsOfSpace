@@ -56,5 +56,6 @@ public class PlayerController : MonoBehaviour
         periodicTable.FoundElement(symbol, 2f, 1f, 2f, 0.5f);
 
         tilemap.SetTile(cellPosition, null);
+        GameManager.Instance.SavePlanetBlock(new Vector2Int(cellPosition.x, cellPosition.y));
     }
 }
