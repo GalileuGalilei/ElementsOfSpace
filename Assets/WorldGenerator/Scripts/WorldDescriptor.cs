@@ -28,10 +28,10 @@ public class WorldDescriptor : ScriptableObject
     [System.Serializable]
     public class CaveAutomataParams
     {
+        public float birthChance;
+        public float deathChance;
+        public int stepsLimit;
         public int birthLimit;
-        public int deathLimit;
-        public int numberOfSteps;
-        public float chanceToStartAlive;
     }
 
     public int width;

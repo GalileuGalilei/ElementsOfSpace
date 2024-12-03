@@ -23,3 +23,9 @@ MonoBehaviour:
     layerHeight: -20
   - ElementSymbol: C
     layerHeight: 0
+  elementChunks: []
+  caveAutomataParams:
+    birthChance: 0.1
+    deathChance: 0.05
+    stepsLimit: 1000
+    birthLimit: 10

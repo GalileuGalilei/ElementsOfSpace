@@ -46,8 +46,8 @@ public class WorldGenerator : MonoBehaviour
         ResetWorld();
         CalculateWorldBounds(worldDescriptor);
         GenerateWorldLayers(width, tilesPerLayerHeight);
-        GenerateTileChuncks(worldDescriptor.TileSizeRarityChuncks);
-        //GenerateWorldCaves();
+        //GenerateTileChuncks(worldDescriptor.TileSizeRarityChuncks);
+        GenerateWorldCaves(worldDescriptor.caveAutomataParams);
         AddPlanetData(planetData);
     }
 
@@ -98,6 +98,13 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
+    private void GenerateWorldCaves(WorldDescriptor.CaveAutomataParams caveParams)
+    {
+        CelularAutomata automata = new CelularAutomata(caveParams.birthLimit, caveParams.stepsLimit, caveParams.birthChance, caveParams.deathChance);
+        Vector3Int start = new Vector3Int(0, (maxHeight + minHeight) / 2);
+        automata.AddBlocks(tilemap, null, IsInMap, start);
+    }
+
     //loas which blocks were destroyed in the planet in the last save
     private void AddPlanetData(PlanetData planetData)
     {
@@ -105,6 +112,26 @@ public class WorldGenerator : MonoBehaviour
         {
             tilemap.SetTile(new Vector3Int(block[0], block[1], 0), null);
         }
+    }
+
+    private bool IsInMap(Vector3Int pos)
+    {
+        if(pos.x > width*0.5 || pos.x < -width*0.5)
+        {
+            return false;
+        }
+
+        if(pos.y < minHeight)
+        {
+            return false;
+        }
+
+        if (pos.y > surface[pos.x + width / 2])
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void ResetWorld()
