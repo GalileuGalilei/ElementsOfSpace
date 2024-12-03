@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 0
   atlas: {fileID: 0}
-  elementLayerHeight: []
-  elementChunks: []
+  elementLayerHeight:
+  - ElementSymbol: 
+    layerHeight: 0
+  elementChunks:
+  - ElementSymbol: 
+    chunkSize: 0
+    rarity: 0
   caveAutomataParams:
     birthLimit: 0
     deathLimit: 0
