@@ -16,16 +16,17 @@ MonoBehaviour:
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
   elementLayerHeight:
   - ElementSymbol: Cu
-    layerHeight: -40
+    layerHeight: -70
   - ElementSymbol: Au
-    layerHeight: -30
+    layerHeight: -50
   - ElementSymbol: Al
     layerHeight: -20
   - ElementSymbol: C
     layerHeight: 0
   elementChunks: []
   caveAutomataParams:
-    birthChance: 0.1
-    deathChance: 0.05
-    stepsLimit: 1000
-    birthLimit: 10
+    birthChance: 0.2
+    deathChance: 0.15
+    movingMultiplier: 0.95
+    stepsLimit: 900
+    birthLimit: 5

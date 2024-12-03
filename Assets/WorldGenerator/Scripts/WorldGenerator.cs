@@ -100,9 +100,9 @@ public class WorldGenerator : MonoBehaviour
 
     private void GenerateWorldCaves(WorldDescriptor.CaveAutomataParams caveParams)
     {
-        CelularAutomata automata = new CelularAutomata(caveParams.birthLimit, caveParams.stepsLimit, caveParams.birthChance, caveParams.deathChance);
+        CelularAutomata automata = new CelularAutomata(caveParams.birthLimit, caveParams.stepsLimit, caveParams.birthChance, caveParams.deathChance, caveParams.movingMultiplier);
         Vector3Int start = new Vector3Int(0, (maxHeight + minHeight) / 2);
-        automata.AddBlocks(tilemap, null, IsInMap, start);
+        automata.GenerateVeinStructure(tilemap, null, IsInMap, start);
     }
 
     //loas which blocks were destroyed in the planet in the last save
@@ -116,17 +116,17 @@ public class WorldGenerator : MonoBehaviour
 
     private bool IsInMap(Vector3Int pos)
     {
-        if(pos.x > width*0.5 || pos.x < -width*0.5)
+        if(pos.x >= width*0.5 || pos.x <= -width*0.5)
         {
             return false;
         }
 
-        if(pos.y < minHeight)
+        if(pos.y < minHeight - 2)
         {
             return false;
         }
 
-        if (pos.y > surface[pos.x + width / 2])
+        if (pos.y > surface[pos.x + width / 2] - 3)
         {
             return false;
         }

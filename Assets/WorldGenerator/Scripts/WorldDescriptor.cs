@@ -30,6 +30,7 @@ public class WorldDescriptor : ScriptableObject
     {
         public float birthChance;
         public float deathChance;
+        public float movingMultiplier;
         public int stepsLimit;
         public int birthLimit;
     }
