@@ -15,18 +15,28 @@ MonoBehaviour:
   width: 300
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
   elementLayerHeight:
-  - ElementSymbol: Cu
-    layerHeight: -70
-  - ElementSymbol: Au
-    layerHeight: -50
-  - ElementSymbol: Al
+  - ElementSymbol: Fe
+    layerHeight: 0
+  - ElementSymbol: Si
+    layerHeight: -5
+  - ElementSymbol: O
+    layerHeight: -15
+  - ElementSymbol: Mg
     layerHeight: -20
   - ElementSymbol: C
-    layerHeight: 0
+    layerHeight: -25
+  - ElementSymbol: C
+    layerHeight: -25
+  - ElementSymbol: S
+    layerHeight: -30
+  - ElementSymbol: Ni
+    layerHeight: -40
+  - ElementSymbol: F
+    layerHeight: -60
   elementChunks: []
   caveAutomataParams:
-    birthChance: 0.2
-    deathChance: 0.15
-    movingMultiplier: 0.95
+    birthChance: 0.01
+    deathChance: 0.004
+    movingMultiplier: 0.9
     stepsLimit: 900
-    birthLimit: 5
+    birthLimit: 4

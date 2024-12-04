@@ -59,7 +59,7 @@ public class WorldGenerator : MonoBehaviour
 
         for (int x = -width / 2; x < width / 2; x++)
         {
-            float noiseValue = Mathf.PerlinNoise(x * noiseScale, 0);
+            float noiseValue = Mathf.PerlinNoise(x * noiseScale, 0) / tilesPerLayerHeight.Count;
             int currentHeight = tilesPerLayerHeight[0].Item2;
 
             for (int i = 0; i < tilesPerLayerHeight.Count; i++)
