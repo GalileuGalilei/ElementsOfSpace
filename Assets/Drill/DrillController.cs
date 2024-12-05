@@ -53,7 +53,7 @@ public class DrillController : MonoBehaviour
         Vector3Int cellPosition = tilemap.WorldToCell(worldPos);
 
         //se não houver bloco, salva as informações para continuar a perfuração no Update()
-        if (tilemap.GetTile(cellPosition) == null)
+        if (tilemap.GetTile(cellPosition) == GameManager.Instance.CurrentBackgroundTile)
         {
             keepDigging = true;
             keepOnDestroyBlock = OnDestroyBlock;

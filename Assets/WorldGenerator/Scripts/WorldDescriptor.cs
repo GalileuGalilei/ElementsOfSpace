@@ -35,8 +35,8 @@ public class WorldDescriptor : ScriptableObject
         public int birthLimit;
     }
 
+    public string planetName;
     public int width;
-
     [SerializeField]
     private SpriteAtlas atlas;
     [SerializeField]
@@ -49,6 +49,7 @@ public class WorldDescriptor : ScriptableObject
 
     public List<(Tile, int)> TilesPerLayerHeight;
     public List<(Tile, int, int)> TileSizeRarityChuncks;
+    public Tile TileBackground;
 
     public WorldDescriptor()
     {
@@ -62,6 +63,13 @@ public class WorldDescriptor : ScriptableObject
             return;
         }
 
+        //save background tile
+        TileBackground = ScriptableObject.CreateInstance<Tile>();
+        TileBackground.sprite = atlas.GetSprite(planetName);
+        TileBackground.colliderType = Tile.ColliderType.None;
+        TileBackground.gameObject.layer = LayerMask.GetMask("Background");
+
+        //save tiles per layer height
         TilesPerLayerHeight = new List<(Tile, int)>();
         TileSizeRarityChuncks = new List<(Tile, int, int)>();
 

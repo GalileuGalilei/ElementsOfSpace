@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Cinemachine;
 using UnityEngine.Events;
 using System.Collections;
+using TreeEditor;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Game Manager. The object containing this script is responsible for saving and loading game data, and initializing the game.
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public bool HasSavedGameData { private set; get; } = false;
     public string CurrentPlanet { private set; get; } = string.Empty;
+    public Tile CurrentBackgroundTile { private set; get; }
     public static GameManager Instance
     {
         get
@@ -225,6 +228,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"WorldDescriptor {planetName} not found");
         }
 
+        CurrentBackgroundTile = descriptor.TileBackground;
         generator.GenerateWorld(descriptor, planetData);
     }
 

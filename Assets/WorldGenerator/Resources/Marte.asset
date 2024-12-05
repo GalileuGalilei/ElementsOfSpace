@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d4c89f318ca8e449c3960d18a7d5ac, type: 3}
   m_Name: Marte
   m_EditorClassIdentifier: 
+  planetName: Marte
   width: 300
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
   elementLayerHeight:
-  - ElementSymbol: Fe
-    layerHeight: 0
-  - ElementSymbol: Si
-    layerHeight: -5
-  - ElementSymbol: O
-    layerHeight: -15
-  - ElementSymbol: Mg
-    layerHeight: -20
-  - ElementSymbol: C
-    layerHeight: -25
-  - ElementSymbol: C
-    layerHeight: -25
-  - ElementSymbol: S
-    layerHeight: -30
-  - ElementSymbol: Ni
-    layerHeight: -40
   - ElementSymbol: F
     layerHeight: -60
+  - ElementSymbol: Ni
+    layerHeight: -40
+  - ElementSymbol: S
+    layerHeight: -30
+  - ElementSymbol: C
+    layerHeight: -25
+  - ElementSymbol: Mg
+    layerHeight: -20
+  - ElementSymbol: O
+    layerHeight: -15
+  - ElementSymbol: Si
+    layerHeight: -5
+  - ElementSymbol: Fe
+    layerHeight: 0
+  - ElementSymbol: Fe
+    layerHeight: 2
   elementChunks: []
   caveAutomataParams:
     birthChance: 0.01
@@ -40,3 +41,4 @@ MonoBehaviour:
     movingMultiplier: 0.9
     stepsLimit: 900
     birthLimit: 4
+  TileBackground: {fileID: 0}

@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         string symbol = tilemap.GetTile(cellPosition).name;
         periodicTable.FoundElement(symbol, 2f, 1f, 2f, 0.5f);
 
-        tilemap.SetTile(cellPosition, null);
+        tilemap.SetTile(cellPosition, GameManager.Instance.CurrentBackgroundTile);
         GameManager.Instance.SavePlanetBlock(new Vector2Int(cellPosition.x, cellPosition.y));
     }
 }

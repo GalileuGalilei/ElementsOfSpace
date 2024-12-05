@@ -59,7 +59,7 @@ public class WorldGenerator : MonoBehaviour
 
         for (int x = -width / 2; x < width / 2; x++)
         {
-            float noiseValue = Mathf.PerlinNoise(x * noiseScale, 0) / tilesPerLayerHeight.Count;
+            float noiseValue = Mathf.PerlinNoise(x * noiseScale, 0);
             int currentHeight = tilesPerLayerHeight[0].Item2;
 
             for (int i = 0; i < tilesPerLayerHeight.Count; i++)
@@ -102,15 +102,16 @@ public class WorldGenerator : MonoBehaviour
     {
         CelularAutomata automata = new CelularAutomata(caveParams.birthLimit, caveParams.stepsLimit, caveParams.birthChance, caveParams.deathChance, caveParams.movingMultiplier);
         Vector3Int start = new Vector3Int(0, (maxHeight + minHeight) / 2);
-        automata.GenerateVeinStructure(tilemap, null, IsInMap, start);
+        automata.GenerateVeinStructure(tilemap, GameManager.Instance.CurrentBackgroundTile, IsInMap, start);
     }
 
     //loas which blocks were destroyed in the planet in the last save
     private void AddPlanetData(PlanetData planetData)
     {
+        Tile tile = GameManager.Instance.CurrentBackgroundTile;
         foreach (var block in planetData.destroyedBlocks)
         {
-            tilemap.SetTile(new Vector3Int(block[0], block[1], 0), null);
+            tilemap.SetTile(new Vector3Int(block[0], block[1], 0), tile);
         }
     }
 
