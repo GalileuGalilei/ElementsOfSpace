@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         drillController = GetComponentInChildren<DrillController>();
-        tilemap = FindAnyObjectByType<Tilemap>();
+        tilemap = GameObject.Find("TilemapForeground").GetComponent<Tilemap>();
         periodicTable = FindAnyObjectByType<PeriodicTable>();
     }
 
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         string symbol = tilemap.GetTile(cellPosition).name;
         periodicTable.FoundElement(symbol, 2f, 1f, 2f, 0.5f);
 
-        tilemap.SetTile(cellPosition, GameManager.Instance.CurrentBackgroundTile);
+        tilemap.SetTile(cellPosition, null);
         GameManager.Instance.SavePlanetBlock(new Vector2Int(cellPosition.x, cellPosition.y));
     }
 }

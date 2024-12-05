@@ -10,43 +10,57 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36d4c89f318ca8e449c3960d18a7d5ac, type: 3}
-  m_Name: Marte
+  m_Name: Mercurio
   m_EditorClassIdentifier: 
-  planetName: Marte
-  width: 300
+  planetName: Mercurio
+  width: 200
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
   elementLayerHeight:
-  - ElementSymbol: F
-    layerHeight: -60
-  - ElementSymbol: Ni
+  - ElementSymbol: Fe
     layerHeight: -40
-  - ElementSymbol: S
+  - ElementSymbol: Fe
+    layerHeight: -35
+  - ElementSymbol: Ni
     layerHeight: -30
-  - ElementSymbol: C
+  - ElementSymbol: Si
     layerHeight: -25
-  - ElementSymbol: Mg
-    layerHeight: -20
   - ElementSymbol: O
+    layerHeight: -22
+  - ElementSymbol: Fe
+    layerHeight: -17
+  - ElementSymbol: Mg
     layerHeight: -15
+  - ElementSymbol: Ca
+    layerHeight: -12
+  - ElementSymbol: O
+    layerHeight: -10
+  - ElementSymbol: Si
+    layerHeight: -5
   - ElementSymbol: Si
     layerHeight: -5
   elementChunks:
-  - ElementSymbol: H
-    chunkSize: 8
-    amount: 8
   - ElementSymbol: Cl
     chunkSize: 5
     amount: 5
   - ElementSymbol: Na
     chunkSize: 5
-    amount: 9
-  - ElementSymbol: Al
-    chunkSize: 5
+    amount: 7
+  - ElementSymbol: K
+    chunkSize: 6
     amount: 5
+  - ElementSymbol: S
+    chunkSize: 5
+    amount: 10
+  - ElementSymbol: C
+    chunkSize: 4
+    amount: 20
+  - ElementSymbol: O
+    chunkSize: 4
+    amount: 20
   caveAutomataParams:
-    birthChance: 0.05
-    deathChance: 0.07
-    movingMultiplier: {x: 0.999, y: 0.7}
-    stepsLimit: 850
-    birthLimit: 6
+    birthChance: 0.14
+    deathChance: 0.05
+    movingMultiplier: {x: 0.99, y: 0.7}
+    stepsLimit: 500
+    birthLimit: 4
   TileBackground: {fileID: 0}

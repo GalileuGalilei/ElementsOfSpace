@@ -15,6 +15,7 @@ TagManager:
   - UI_Back
   - Block
   - PostProcessing
+  - Stars
   - Background
   - 
   - 
@@ -37,8 +38,13 @@ TagManager:
   - 
   - 
   - 
-  - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3601699035
+    locked: 0
+  - name: Foreground
+    uniqueID: 209499705
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

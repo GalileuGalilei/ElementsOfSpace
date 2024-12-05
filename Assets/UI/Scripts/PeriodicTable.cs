@@ -64,6 +64,11 @@ public class PeriodicTable : MonoBehaviour
         foundElements.Add(symbol);
         ElementUI elementUI = transform.Find(symbol).GetComponent<ElementUI>();
         
+        if(!elementUI)
+        {
+            Debug.LogError($"Element {symbol} not found in periodic table");
+        }
+
         StartCoroutine(elementUI.ElementFoundAnimation(foundAnimationTime));
         StartCoroutine(FadeInAndOutTable(fadeInTime, keepOnScreenTime, fadeOutTime));
     }

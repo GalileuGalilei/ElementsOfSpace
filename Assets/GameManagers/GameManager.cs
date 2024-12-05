@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public bool HasSavedGameData { private set; get; } = false;
     public string CurrentPlanet { private set; get; } = string.Empty;
-    public Tile CurrentBackgroundTile { private set; get; }
     public static GameManager Instance
     {
         get
@@ -228,8 +227,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"WorldDescriptor {planetName} not found");
         }
 
-        CurrentBackgroundTile = descriptor.TileBackground;
-        generator.GenerateWorld(descriptor, planetData);
+        StartCoroutine(generator.GenerateWorldAsync(descriptor, planetData));
     }
 
     private void InitializePlayer()
@@ -245,7 +243,7 @@ public class GameManager : MonoBehaviour
         if (!HasSavedGameData)
         {
             spaceship.SetPlayer(player);
-            spaceship.transform.position = new Vector3(0, 50, 0);
+            spaceship.transform.position = new Vector3(0, 100, 0);
             return;
         }
 

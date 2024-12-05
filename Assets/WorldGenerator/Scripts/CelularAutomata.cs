@@ -11,14 +11,14 @@ public class CelularAutomata
     private int stepsLimit;
     private float deathChance;
     private float birthChance;
-    private float movingMultiplier;
+    private Vector2 movingMultiplier;
 
     private int automataCount = 0;
     private int stepsCount = 0;
 
     public delegate bool IsInMapLimits(Vector3Int pos);
 
-    public CelularAutomata(int birthLimit, int stepsLimits, float birthChance, float deathChance, float movingMultiplier)
+    public CelularAutomata(int birthLimit, int stepsLimits, float birthChance, float deathChance, Vector2 movingMultiplier)
     {
         this.birthLimit = birthLimit;
         this.stepsLimit = stepsLimits;
@@ -27,15 +27,35 @@ public class CelularAutomata
         this.movingMultiplier = movingMultiplier;
     }
 
-    public void GenerateVeinStructure(Tilemap map, Tile block, IsInMapLimits isInMap, Vector3Int start)
+    public void GenerateVeinStructureAsync(MonoBehaviour sender, Tilemap map, Tile block, IsInMapLimits isInMap, Vector3Int start)
     {
         automataCount = 0;
         stepsCount = 0;
-        AutomataIterative(map, block, isInMap, start, movingMultiplier);
-        SmoothMap(map, block);
+        sender.StartCoroutine(AsyncAutomata(map, block, isInMap, start, movingMultiplier));
     }
 
-    private void AutomataIterative(Tilemap map, Tile block, IsInMapLimits isInMap, Vector3Int start, float movingMultiplier)
+    public static void GenerateOreStructure(Tilemap map, Tile block, IsInMapLimits isInMap, int size, int amount)
+    {
+        BoundsInt bounds = map.cellBounds;
+        for(int i = 0; i < amount; i++)
+        {
+            //random position inside map bounds
+            Vector3Int randomPos = new Vector3Int(UnityEngine.Random.Range(bounds.xMin, bounds.xMax), UnityEngine.Random.Range(bounds.yMin, bounds.yMax), 0);
+            for (int j = 0; j < size*size; j++)
+            {
+                Vector2 rand = UnityEngine.Random.insideUnitCircle * size;
+                Vector3Int pos = randomPos + new Vector3Int((int)rand.x, (int)rand.y, 0);
+                if (isInMap(pos))
+                {
+                    map.SetTile(pos, block);
+                }
+            }
+        }
+
+
+    }
+
+    private IEnumerator AsyncAutomata(Tilemap map, Tile block, IsInMapLimits isInMap, Vector3Int start, Vector2 movingMultiplier)
     {
         // A queue to store the active automata with their weights
         Queue<(Vector3Int position, Vector2 weights)> activeAutomata = new Queue<(Vector3Int, Vector2)>();
@@ -46,6 +66,12 @@ public class CelularAutomata
 
         while (activeAutomata.Count > 0 || stepsCount < stepsLimit)
         {
+            //avoid blocking the main thread
+            if (stepsCount % 50 == 0)
+            {
+                yield return new WaitForSeconds(0.025f);
+            }
+
             if(automataCount == 0)
             {
                 //generate a new automata at random position
@@ -72,7 +98,7 @@ public class CelularAutomata
             }
 
             // Check if the automata should die
-            if (stepsCount >= stepsLimit || (UnityEngine.Random.Range(0f, 1f) < deathChance && automataCount > 1))
+            if (stepsCount >= stepsLimit || (UnityEngine.Random.Range(0f, 1f) < deathChance))
             {
                 automataCount--;
                 continue;
@@ -89,8 +115,16 @@ public class CelularAutomata
             Vector2 newWeight = UnityEngine.Random.insideUnitCircle + currentWeights * movingMultiplier;
             Vector3Int newPos = currentPos + (Vector3Int)ManhatanNormalize(newWeight);
 
+            if(!isInMap(newPos))
+            {
+                newWeight = -newWeight;
+                newPos = currentPos + (Vector3Int)ManhatanNormalize(newWeight);
+            }
+
             activeAutomata.Enqueue((newPos, newWeight));
         }
+
+        SmoothMap(map, block);
     }
 
 

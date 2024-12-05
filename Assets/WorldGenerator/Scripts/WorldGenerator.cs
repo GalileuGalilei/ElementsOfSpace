@@ -8,7 +8,9 @@ using UnityEngine.U2D;
 public class WorldGenerator : MonoBehaviour
 {
     [SerializeField]
-    Tilemap tilemap;
+    Tilemap tilemapForground;
+    [SerializeField]
+    Tilemap tilemapBackground;
 
     [SerializeField]
     float noiseScale = 0.03f;
@@ -39,23 +41,27 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateWorld(WorldDescriptor worldDescriptor, PlanetData planetData)
+    public IEnumerator GenerateWorldAsync(WorldDescriptor worldDescriptor, PlanetData planetData)
     {
         Random.InitState(planetData.seed.GetHashCode());
 
         ResetWorld();
         CalculateWorldBounds(worldDescriptor);
-        GenerateWorldLayers(width, tilesPerLayerHeight);
-        //GenerateTileChuncks(worldDescriptor.TileSizeRarityChuncks);
-        GenerateWorldCaves(worldDescriptor.caveAutomataParams);
+        GenerateWorldLayers(width, tilesPerLayerHeight, worldDescriptor);
+        yield return new WaitForNextFrameUnit();
+        GenerateTileChuncks(worldDescriptor.TileSizeRarityChuncks);
+        yield return new WaitForNextFrameUnit();
         AddPlanetData(planetData);
+        yield return new WaitForNextFrameUnit();
+        GenerateWorldCaves(worldDescriptor.caveAutomataParams);
     }
 
     /// <summary>
     /// generate the world based on the layers separeted by their heights
     /// </summary>
-    private void GenerateWorldLayers(int width, List<(Tile, int)> tilesPerLayerHeight)
+    private void GenerateWorldLayers(int width, List<(Tile, int)> tilesPerLayerHeight, WorldDescriptor descriptor)
     {
+        Tile backgroundTile = descriptor.TileBackground;
 
         for (int x = -width / 2; x < width / 2; x++)
         {
@@ -68,7 +74,8 @@ public class WorldGenerator : MonoBehaviour
 
                 for (int y = currentHeight; y < currentHeight + columnHeight; y++)
                 {
-                    tilemap.SetTile(tilemap.WorldToCell(new Vector3Int(x, y, 0)), tilesPerLayerHeight[i].Item1);
+                    tilemapForground.SetTile(tilemapForground.WorldToCell(new Vector3Int(x, y, 0)), tilesPerLayerHeight[i].Item1);
+                    tilemapBackground.SetTile(tilemapBackground.WorldToCell(new Vector3Int(x, y, 0)), backgroundTile);
                 }
                 currentHeight += columnHeight;
             }
@@ -78,23 +85,11 @@ public class WorldGenerator : MonoBehaviour
     }
 
     //generate chunks of tiles, like ores
-    private void GenerateTileChuncks(List<(Tile, int, int)> TileSizeRarityChuncks)
+    private void GenerateTileChuncks(List<(Tile, int, int)> TileSizeAmountChuncks)
     {
-        int step = 10;
-
-        //generate chunks bellow surface heights
-        for (int x = -width / 2; x < width / 2; x += step)
+        foreach (var chunck in TileSizeAmountChuncks)
         {
-            for (int y = 0; y < surface[x + width / 2]; y += step)
-            {
-                foreach (var tile in TileSizeRarityChuncks)
-                {
-                    if (Random.Range(0, 100) < tile.Item3)
-                    {
-                        //Automata(tileset, tile)
-                    }
-                }
-            }
+            CelularAutomata.GenerateOreStructure(tilemapForground, chunck.Item1, IsInMap, chunck.Item2, chunck.Item3);
         }
     }
 
@@ -102,41 +97,26 @@ public class WorldGenerator : MonoBehaviour
     {
         CelularAutomata automata = new CelularAutomata(caveParams.birthLimit, caveParams.stepsLimit, caveParams.birthChance, caveParams.deathChance, caveParams.movingMultiplier);
         Vector3Int start = new Vector3Int(0, (maxHeight + minHeight) / 2);
-        automata.GenerateVeinStructure(tilemap, GameManager.Instance.CurrentBackgroundTile, IsInMap, start);
+        automata.GenerateVeinStructureAsync(this, tilemapForground, null, IsInMap, start);
     }
 
     //loas which blocks were destroyed in the planet in the last save
     private void AddPlanetData(PlanetData planetData)
     {
-        Tile tile = GameManager.Instance.CurrentBackgroundTile;
         foreach (var block in planetData.destroyedBlocks)
         {
-            tilemap.SetTile(new Vector3Int(block[0], block[1], 0), tile);
+            tilemapForground.SetTile(new Vector3Int(block[0], block[1], 0), null);
         }
     }
 
     private bool IsInMap(Vector3Int pos)
     {
-        if(pos.x >= width*0.5 || pos.x <= -width*0.5)
-        {
-            return false;
-        }
-
-        if(pos.y < minHeight - 2)
-        {
-            return false;
-        }
-
-        if (pos.y > surface[pos.x + width / 2] - 3)
-        {
-            return false;
-        }
-
-        return true;
+        return tilemapBackground.HasTile(pos);
     }
 
     private void ResetWorld()
     {
-        tilemap.ClearAllTiles();
+        tilemapForground.ClearAllTiles();
+        tilemapBackground.ClearAllTiles();
     }
 }

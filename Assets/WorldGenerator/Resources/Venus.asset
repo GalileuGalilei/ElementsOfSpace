@@ -10,39 +10,47 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36d4c89f318ca8e449c3960d18a7d5ac, type: 3}
-  m_Name: Marte
+  m_Name: Venus
   m_EditorClassIdentifier: 
-  planetName: Marte
+  planetName: Venus
   width: 300
   atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
   elementLayerHeight:
-  - ElementSymbol: F
-    layerHeight: -60
+  - ElementSymbol: Fe
+    layerHeight: -50
+  - ElementSymbol: Fe
+    layerHeight: -45
   - ElementSymbol: Ni
-    layerHeight: -40
-  - ElementSymbol: S
     layerHeight: -30
-  - ElementSymbol: C
+  - ElementSymbol: Si
     layerHeight: -25
   - ElementSymbol: Mg
     layerHeight: -20
-  - ElementSymbol: O
+  - ElementSymbol: Al
     layerHeight: -15
+  - ElementSymbol: Ca
+    layerHeight: -10
   - ElementSymbol: Si
     layerHeight: -5
   elementChunks:
-  - ElementSymbol: H
-    chunkSize: 8
-    amount: 8
   - ElementSymbol: Cl
     chunkSize: 5
     amount: 5
   - ElementSymbol: Na
     chunkSize: 5
-    amount: 9
-  - ElementSymbol: Al
-    chunkSize: 5
+    amount: 7
+  - ElementSymbol: K
+    chunkSize: 6
     amount: 5
+  - ElementSymbol: S
+    chunkSize: 5
+    amount: 10
+  - ElementSymbol: C
+    chunkSize: 4
+    amount: 20
+  - ElementSymbol: O
+    chunkSize: 4
+    amount: 20
   caveAutomataParams:
     birthChance: 0.05
     deathChance: 0.07

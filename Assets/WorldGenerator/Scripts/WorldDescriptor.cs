@@ -22,7 +22,7 @@ public class WorldDescriptor : ScriptableObject
     {
         public string ElementSymbol;
         public int chunkSize;
-        public int rarity;
+        public int amount;
     }
 
     [System.Serializable]
@@ -30,7 +30,7 @@ public class WorldDescriptor : ScriptableObject
     {
         public float birthChance;
         public float deathChance;
-        public float movingMultiplier;
+        public Vector2 movingMultiplier;
         public int stepsLimit;
         public int birthLimit;
     }
@@ -49,7 +49,7 @@ public class WorldDescriptor : ScriptableObject
 
     public List<(Tile, int)> TilesPerLayerHeight;
     public List<(Tile, int, int)> TileSizeRarityChuncks;
-    public Tile TileBackground;
+    [HideInInspector] public Tile TileBackground;
 
     public WorldDescriptor()
     {
@@ -66,8 +66,6 @@ public class WorldDescriptor : ScriptableObject
         //save background tile
         TileBackground = ScriptableObject.CreateInstance<Tile>();
         TileBackground.sprite = atlas.GetSprite(planetName);
-        TileBackground.colliderType = Tile.ColliderType.None;
-        TileBackground.gameObject.layer = LayerMask.GetMask("Background");
 
         //save tiles per layer height
         TilesPerLayerHeight = new List<(Tile, int)>();
@@ -88,7 +86,7 @@ public class WorldDescriptor : ScriptableObject
             Tile tile = ScriptableObject.CreateInstance<Tile>();
             tile.sprite = sprite;
             tile.name = elem.ElementSymbol;
-            TileSizeRarityChuncks.Add((tile, elem.chunkSize, elem.rarity));
+            TileSizeRarityChuncks.Add((tile, elem.chunkSize, elem.amount));
         }
     }
 
