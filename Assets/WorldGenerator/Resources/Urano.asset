@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d4c89f318ca8e449c3960d18a7d5ac, type: 3}
+  m_Name: Urano
+  m_EditorClassIdentifier: 
+  planetName: Urano
+  width: 350
+  atlas: {fileID: 100100200, guid: 5882d0da435a11d4f867517d822cd7a9, type: 3}
+  elementLayerHeight:
+  - ElementSymbol: F
+    layerHeight: -60
+  - ElementSymbol: Si
+    layerHeight: -50
+  - ElementSymbol: C
+    layerHeight: -40
+  - ElementSymbol: I
+    layerHeight: -36
+  - ElementSymbol: Si
+    layerHeight: -30
+  - ElementSymbol: Bh
+    layerHeight: -25
+  - ElementSymbol: H
+    layerHeight: -20
+  - ElementSymbol: He
+    layerHeight: -15
+  - ElementSymbol: N
+    layerHeight: -5
+  elementChunks:
+  - ElementSymbol: Co
+    chunkSize: 8
+    amount: 8
+  - ElementSymbol: Cl
+    chunkSize: 5
+    amount: 5
+  - ElementSymbol: S
+    chunkSize: 5
+    amount: 9
+  - ElementSymbol: O
+    chunkSize: 5
+    amount: 5
+  - ElementSymbol: He
+    chunkSize: 5
+    amount: 5
+  - ElementSymbol: Ne
+    chunkSize: 6
+    amount: 7
+  - ElementSymbol: Ag
+    chunkSize: 3
+    amount: 4
+  - ElementSymbol: Ga
+    chunkSize: 6
+    amount: 4
+  - ElementSymbol: B
+    chunkSize: 6
+    amount: 4
+  - ElementSymbol: Bk
+    chunkSize: 6
+    amount: 4
+  - ElementSymbol: Ra
+    chunkSize: 6
+    amount: 4
+  - ElementSymbol: Og
+    chunkSize: 6
+    amount: 4
+  - ElementSymbol: Po
+    chunkSize: 6
+    amount: 4
+  caveAutomataParams:
+    birthChance: 0.09
+    deathChance: 0.02
+    movingMultiplier: {x: 0.99, y: 0.7}
+    stepsLimit: 800
+    birthLimit: 6
+  TileBackground: {fileID: 0}

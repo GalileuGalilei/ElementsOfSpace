@@ -12,7 +12,10 @@ public class PlanetUIController : MonoBehaviour
     private Animator animator;
     private RectTransform SolarSystem;
 
-    void Start()
+    private Vector3 originalPos = Vector3.zero;
+    private Vector3 originalScale = Vector3.one;
+
+    void Awake()
     {
         animator = GetComponent<Animator>();
         animator.Play(planetName);
@@ -23,21 +26,24 @@ public class PlanetUIController : MonoBehaviour
     {
         planetDescription.SetActive(false);
         //animator.Play("Enter");
-        GameManager.Instance.LoadNewGame(planetName);
+        GameManager.Instance.LoadNewPlanet(planetName);
     }
 
     public void ZoomIn()
     {
-        float zoomIn = 1.5f / transform.localScale.z;
+        float zoomIn = 3.0f / (transform.localScale.z * 0.85f);
 
         if (planetDescription.activeSelf)
         {
             planetDescription.SetActive(false);
-            SolarSystem.localScale = Vector3.one;
-            SolarSystem.position = Vector3.zero;
+            SolarSystem.localScale = originalScale;
+            SolarSystem.position = originalPos;
         }
         else
         {
+            originalPos = SolarSystem.position;
+            originalScale = SolarSystem.localScale;
+
             planetDescription.SetActive(true);
             Vector3 position = GetComponent<RectTransform>().localPosition * -zoomIn;
             SolarSystem.localPosition = new Vector3(position.x, position.y, 0);

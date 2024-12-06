@@ -202,6 +202,34 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 21640f0e-09ef-4d75-8e74-28f2dd7d880e
     m_ActionName: Player/Interact
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6013770397270218236}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnEnterSpaceship
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 27246178-e5ab-49b8-8783-5e1530447c07
+    m_ActionName: Player/Spaceship
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 830d1ddd-395f-48e5-a8d6-f5760eb608c9
+    m_ActionName: 'Touch/PrimaryTouch[/Device Simulator Touchscreen/touch0/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a3c18018-ceba-4e92-99fd-049a1fc8641a
+    m_ActionName: 'Touch/SecondaryTouch[/Device Simulator Touchscreen/touch1/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ebdba7ad-3cc6-41d4-86da-222d0580d6c2
+    m_ActionName: 'Touch/SecondaryTouchContact[/Device Simulator Touchscreen/touch1/press]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

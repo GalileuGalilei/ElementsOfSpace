@@ -5,8 +5,6 @@ using Newtonsoft.Json;
 using Cinemachine;
 using UnityEngine.Events;
 using System.Collections;
-using TreeEditor;
-using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Game Manager. The object containing this script is responsible for saving and loading game data, and initializing the game.
@@ -14,6 +12,8 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    private GameObject solarSystemMenu;
+    private Vector3 originalSolarSystemPos = Vector3.zero;
     private const string playerDataPath = "PlayerData.json";
     private const string planetDataPath = "PlanetData.json";
     private PlayerData playerData;
@@ -49,6 +49,37 @@ public class GameManager : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         HasSavedGameData = CheckPlayerData();
+    }
+
+    public void InitializeEarthScene()
+    {
+        StartCoroutine(InitializeEarthAsync());
+    }
+
+    private IEnumerator InitializeEarthAsync()
+    {
+        CurrentPlanet = "Terra";
+        AsyncOperation sceneLoader = SceneManager.LoadSceneAsync("Earth");
+
+        while (!sceneLoader.isDone)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        SpaceshipController spaceship = Instantiate(spaceshipPrefab, new Vector3(25.4890938f, -0.774722517f, 0), Quaternion.identity);
+        PlayerController player = Instantiate(playerPrefab, new Vector3(2.48135281f, -1.48020208f, 0), Quaternion.identity);
+        spaceship.GetComponent<ParticleSystem>().enableEmission = false;
+        player.GetComponent<Rigidbody2D>().gravityScale = 0.1f;
+        player.SpaceshipController = spaceship;
+
+        //find cinemachine virtual camera
+        CinemachineVirtualCamera camera = FindAnyObjectByType<CinemachineVirtualCamera>();
+        camera.Follow = player.transform;
+        camera.LookAt = player.transform;
+
+        solarSystemMenu = GameObject.Find("SolarSystemMenu");
+        originalSolarSystemPos = solarSystemMenu.transform.position;
+        ShowSolarSystemMenu(false);
     }
 
     /// <summary>
@@ -153,8 +184,14 @@ public class GameManager : MonoBehaviour
     /// Asyncronously loads a new game scene and initializes the planet and player. It there were previus data, deletes it.
     /// </summary>
     /// <param name="planetName"></param>
-    public void LoadNewGame(string planetName)
+    public void LoadNewPlanet(string planetName)
     {
+        if(planetName == "Terra")
+        {
+            InitializeEarthScene();
+            return;
+        }
+
         StartCoroutine(LoadNewGameAsync(planetName));
     }
 
@@ -178,6 +215,10 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
+        solarSystemMenu = GameObject.Find("SolarSystemMenu");
+        originalSolarSystemPos = solarSystemMenu.transform.position;
+        ShowSolarSystemMenu(false);
+
         ResetGame();
         InitializePlayer();
         InitializePlanet(planetName);
@@ -191,6 +232,10 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
         }
+
+        solarSystemMenu = GameObject.Find("SolarSystemMenu");
+        originalSolarSystemPos = solarSystemMenu.transform.position;
+        ShowSolarSystemMenu(false);
 
         InitializePlayer(); //loads current planet name
         InitializePlanet(CurrentPlanet);
@@ -232,8 +277,10 @@ public class GameManager : MonoBehaviour
 
     private void InitializePlayer()
     {
-        PlayerController player = Instantiate(playerPrefab);
         SpaceshipController spaceship = Instantiate(spaceshipPrefab);
+        PlayerController player = Instantiate(playerPrefab);
+        player.SpaceshipController = spaceship;
+
         PeriodicTable periodicTable = FindAnyObjectByType<PeriodicTable>();
         CinemachineVirtualCamera camera = FindAnyObjectByType<CinemachineVirtualCamera>();
 
@@ -255,6 +302,12 @@ public class GameManager : MonoBehaviour
 
         //loads last planet player was in
         CurrentPlanet = playerData.currentPlanet;
+        if(CurrentPlanet == "Terra")
+        {
+            InitializeEarthScene();
+            return;
+        }
+        
 
         foreach (string element in playerData.foundElements)
         {
@@ -277,5 +330,22 @@ public class GameManager : MonoBehaviour
 
         HasSavedGameData = false;
         return false;
+    }
+
+    public void ShowSolarSystemMenu(bool show)
+    {
+        if(solarSystemMenu == null)
+        {
+            solarSystemMenu = GameObject.Find("SolarSystemMenu");
+        }
+
+        if(show)
+        {
+            solarSystemMenu.transform.position = originalSolarSystemPos;
+        }
+        else
+        {
+            solarSystemMenu.transform.position = new Vector3(-9999,-9999,-9999);
+        }
     }
 }

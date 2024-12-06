@@ -8,7 +8,7 @@ public class DrillController : MonoBehaviour
 {
     public float drillSpeed = 1.0f;
     public float drillRange = 1.0f;
-    private Tilemap tilemap;
+    private Tilemap tilemap = null;
 
     [SerializeField]
     private PlayerController player;
@@ -26,7 +26,6 @@ public class DrillController : MonoBehaviour
 
     private void Start()
     {
-        tilemap = FindAnyObjectByType<Tilemap>();
         animator = GetComponent<Animator>();
         pivot = transform.parent;
     }
@@ -47,6 +46,11 @@ public class DrillController : MonoBehaviour
     {
         //seta a animação de perfuração
         SetState(1);
+
+        if(tilemap == null)
+        {
+            tilemap = GameObject.Find("TilemapForeground").GetComponent<Tilemap>();
+        }
 
         //encontra a posição do bloco a ser destruído
         Vector3 worldPos = new Vector3(player.facingDirection.x, player.facingDirection.y) * tilemap.cellSize.x * 0.5f + transform.position;

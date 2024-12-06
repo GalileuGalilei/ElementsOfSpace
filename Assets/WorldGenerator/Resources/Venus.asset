@@ -51,6 +51,21 @@ MonoBehaviour:
   - ElementSymbol: O
     chunkSize: 4
     amount: 20
+  - ElementSymbol: Nb
+    chunkSize: 4
+    amount: 3
+  - ElementSymbol: Mo
+    chunkSize: 4
+    amount: 3
+  - ElementSymbol: P
+    chunkSize: 6
+    amount: 6
+  - ElementSymbol: Tc
+    chunkSize: 4
+    amount: 3
+  - ElementSymbol: Be
+    chunkSize: 6
+    amount: 6
   caveAutomataParams:
     birthChance: 0.05
     deathChance: 0.07

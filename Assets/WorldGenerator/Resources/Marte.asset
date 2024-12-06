@@ -43,6 +43,18 @@ MonoBehaviour:
   - ElementSymbol: Al
     chunkSize: 5
     amount: 5
+  - ElementSymbol: C
+    chunkSize: 5
+    amount: 5
+  - ElementSymbol: Y
+    chunkSize: 4
+    amount: 3
+  - ElementSymbol: U
+    chunkSize: 4
+    amount: 3
+  - ElementSymbol: Li
+    chunkSize: 4
+    amount: 4
   caveAutomataParams:
     birthChance: 0.05
     deathChance: 0.07

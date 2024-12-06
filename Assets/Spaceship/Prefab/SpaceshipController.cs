@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 /// <summary>
@@ -10,11 +11,16 @@ public class SpaceshipController : MonoBehaviour
 {
     [SerializeField]
     private float deacceleration = 0.1f;
-    
+    [SerializeField]
+    private GameObject rocketMenuButton;
+
     private Rigidbody2D rb;
     private bool onGround = false;
+    private bool onMenu = false;
     private PlayerController player = null;
     private ParticleSystem particle;
+
+    private Vector3 originalSolarSystemPos = Vector3.zero;
 
     private void Start()
     {
@@ -31,9 +37,14 @@ public class SpaceshipController : MonoBehaviour
         }
     }
 
+    public void ShowMenuButton(bool show)
+    {
+        rocketMenuButton.SetActive(show);
+    }
+
     private void FixedUpdate()
     {
-        if(onGround)
+        if (onGround)
         {
             return;
         }
